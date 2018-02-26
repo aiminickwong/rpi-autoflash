@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Fill mode</title>
+
+<meta name="description" content="GNU ddrescue Manual: Fill mode">
+<meta name="keywords" content="GNU ddrescue Manual: Fill mode">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Generate-mode.html#Generate-mode" rel="next" title="Generate mode">
+<link href="Direct-disc-access.html#Direct-disc-access" rel="prev" title="Direct disc access">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Fill-mode"></a>
+<div class="header">
+<p>
+Next: <a href="Generate-mode.html#Generate-mode" accesskey="n" rel="next">Generate mode</a>, Previous: <a href="Direct-disc-access.html#Direct-disc-access" accesskey="p" rel="prev">Direct disc access</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Fill-mode-1"></a>
+<h2 class="chapter">9 Fill mode</h2>
+<a name="index-fill-Mode"></a>
+
+<p>When ddrescue is invoked with the &lsquo;<samp>--fill-mode</samp>&rsquo; option it operates
+in &quot;fill mode&quot;, which is different from the default &quot;rescue mode&quot;. That
+is, if you use the &lsquo;<samp>--fill-mode</samp>&rsquo; option, ddrescue does not rescue
+anything. It only fills with data read from the input file the blocks of
+the output file whose status character from the logfile coincides with
+one of the type characters specified as argument to the
+&lsquo;<samp>--fill-mode</samp>&rsquo; option.
+</p>
+<p>In fill mode the input file may have any size. If it is too small, the
+data will be duplicated as many times as necessary to fill the input
+buffer. If it is too big, only the data needed to fill the input buffer
+will be read. Then the same data will be written to every cluster or
+sector to be filled.
+</p>
+<p>Note that in fill mode the input file is always read from position 0. If
+you specify a &lsquo;<samp>--input-position</samp>&rsquo;, it refers to the original input
+file from which the logfile was built, and is only used to calculate the
+offset between input and output positions.
+</p>
+<p>Note also that when filling the input file of the original rescue run
+you should set &lsquo;<samp>--input-position</samp>&rsquo; and &lsquo;<samp>--output-position</samp>&rsquo; to
+identical values, whereas when filling the output file of the original
+rescue run you should keep the original offset between
+&lsquo;<samp>--input-position</samp>&rsquo; and &lsquo;<samp>--output-position</samp>&rsquo;.
+</p>
+<p>The &lsquo;<samp>--fill-mode</samp>&rsquo; option implies the &lsquo;<samp>--complete-only</samp>&rsquo; option.
+</p>
+<p>In fill mode the logfile is updated to allow resumability when
+interrupted or in case of a crash, but as nothing is being rescued the
+logfile is not destroyed. The status line is the only part of the
+logfile that is modified.
+</p>
+<br>
+<p>The fill mode has a number of uses. See the following examples:
+</p>
+<p>Example 1: Mark parts of the rescued copy to allow finding them when
+examined in an hex editor. For example, the following command line fills
+all blocks marked as &lsquo;<samp>-</samp>&rsquo; (bad-sector) with copies of the string
+&lsquo;<samp>BAD&nbsp;SECTOR&nbsp;</samp>&rsquo;<!-- /@w -->:
+</p>
+<div class="example">
+<pre class="example">printf &quot;BAD SECTOR &quot; &gt; tmpfile
+ddrescue --fill-mode=- tmpfile outfile logfile
+</pre></div>
+
+<p>Example 2: Wipe only the good sectors, leaving the bad sectors alone.
+This way, the drive will still test bad (i.e., with unreadable sectors).
+This is the fastest way of wiping a failing drive, and is specially
+useful when sending the drive back to the manufacturer for warranty
+replacement.
+</p>
+<div class="example">
+<pre class="example">ddrescue --fill-mode=+ --force /dev/zero bad_drive logfile
+</pre></div>
+
+<p>Example 3: Force the drive to remap the bad sectors, making it usable
+again. If the drive has only a few bad sectors, and they are not caused
+by drive age, you can probably just rewrite those sectors, and the drive
+will reallocate them automatically to new &quot;spare&quot; sectors that it keeps
+for just this purpose. WARNING! This may not work on your drive.
+</p>
+<div class="example">
+<pre class="example">ddrescue --fill-mode=- --force --synchronous /dev/zero bad_drive logfile
+</pre></div>
+
+<br>
+<p>Fill mode can also help you to figure out, independently of the file
+system used, what files are partially or entirely in the bad areas of
+the disc. Just follow these steps:
+</p>
+<p>1) Copy the damaged drive with ddrescue until finished. Do not use
+sparse writes. This yields a logfile with only finished (&lsquo;<samp>+</samp>&rsquo;) and
+bad-sector (&lsquo;<samp>-</samp>&rsquo;) blocks.
+</p>
+<p>2) Fill the bad-sector blocks of the copied drive or image file with a
+string not present in any file, for example &quot;DEADBEEF&quot;.
+</p>
+<p>3) Mount the copied drive (or the image file, via loopback device).
+</p>
+<p>4) Grep for the fill string in all the files. Those files containing the
+string reside (at least partially) in damaged disc areas. Note that if
+all the damaged areas are in unused space, grep will not find the string
+in any file, which means that no files are damaged.
+</p>
+<p>5) Unmount the copied drive or image file.
+</p>
+<p>6) Optionally fill the bad-sector blocks of the copied drive or image
+file with zeros to restore the disc image.
+</p>
+<p>Example 4: Figure out what files are in the bad areas of the disc.
+</p>
+<div class="example">
+<pre class="example">ddrescue -b2048 /dev/cdrom cdimage logfile
+printf &quot;DEADBEEF&quot; &gt; tmpfile
+ddrescue --fill-mode=- tmpfile cdimage logfile
+rm tmpfile
+mount -t iso9660 -o loop,ro cdimage /mnt/cdimage
+find /mnt/cdimage -type f -exec grep -l &quot;DEADBEEF&quot; '{}' ';'
+umount /mnt/cdimage
+ddrescue --fill-mode=- /dev/zero cdimage logfile
+</pre></div>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Generate-mode.html#Generate-mode" accesskey="n" rel="next">Generate mode</a>, Previous: <a href="Direct-disc-access.html#Direct-disc-access" accesskey="p" rel="prev">Direct disc access</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+update-alternatives 2018-02-25 17:42:13: run with --remove lzma /usr/bin/xz
+update-alternatives 2018-02-25 17:42:13: link group lzma fully removed
+update-alternatives 2018-02-25 17:43:20: run with --remove fakeroot /usr/bin/fakeroot-sysv
+update-alternatives 2018-02-25 17:43:20: link group fakeroot updated to point to /usr/bin/fakeroot-tcp
+update-alternatives 2018-02-25 17:43:20: run with --remove fakeroot /usr/bin/fakeroot-tcp
+update-alternatives 2018-02-25 17:43:20: link group fakeroot fully removed
+update-alternatives 2018-02-25 17:43:24: run with --remove c++ /usr/bin/g++
+update-alternatives 2018-02-25 17:43:24: link group c++ fully removed
+update-alternatives 2018-02-25 17:43:25: run with --quiet --remove cc /usr/bin/gcc
+update-alternatives 2018-02-25 17:43:25: link group cc fully removed
+update-alternatives 2018-02-25 17:43:25: run with --quiet --remove c89 /usr/bin/c89-gcc
+update-alternatives 2018-02-25 17:43:25: link group c89 fully removed
+update-alternatives 2018-02-25 17:43:25: run with --quiet --remove c99 /usr/bin/c99-gcc
+update-alternatives 2018-02-25 17:43:25: link group c99 fully removed

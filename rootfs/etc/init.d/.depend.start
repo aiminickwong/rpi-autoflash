@@ -1,0 +1,12 @@
+TARGETS = dhcpcd rsyslog triggerhappy killprocs motd bootlogs apply_noobs_os_config resize2fs_once dbus single dphys-swapfile ntp cron bluetooth avahi-daemon raspi-config plymouth rc.local rmnologin
+INTERACTIVE =
+dbus: rsyslog
+single: killprocs motd bootlogs
+dphys-swapfile: rsyslog
+ntp: rsyslog
+cron: rsyslog
+bluetooth: rsyslog dbus
+avahi-daemon: dbus rsyslog
+plymouth: dhcpcd rsyslog triggerhappy bluetooth dbus avahi-daemon motd bootlogs dphys-swapfile ntp apply_noobs_os_config raspi-config cron resize2fs_once
+rc.local: dhcpcd rsyslog triggerhappy bluetooth dbus avahi-daemon motd bootlogs dphys-swapfile ntp apply_noobs_os_config raspi-config cron resize2fs_once
+rmnologin: dhcpcd rsyslog triggerhappy bluetooth dbus avahi-daemon motd bootlogs dphys-swapfile ntp apply_noobs_os_config raspi-config cron resize2fs_once

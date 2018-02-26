@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Introduction</title>
+
+<meta name="description" content="GNU ddrescue Manual: Introduction">
+<meta name="keywords" content="GNU ddrescue Manual: Introduction">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Basic-concepts.html#Basic-concepts" rel="next" title="Basic concepts">
+<link href="index.html#Top" rel="prev" title="Top">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Introduction"></a>
+<div class="header">
+<p>
+Next: <a href="Basic-concepts.html#Basic-concepts" accesskey="n" rel="next">Basic concepts</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Introduction-1"></a>
+<h2 class="chapter">1 Introduction</h2>
+<a name="index-introduction"></a>
+
+<p>GNU ddrescue is a data recovery tool. It copies data from one file or
+block device (hard disc, cdrom, etc) to another, trying to rescue the
+good parts first in case of read errors.
+</p>
+<p>The basic operation of ddrescue is fully automatic. That is, you don&rsquo;t
+have to wait for an error, stop the program, read the log, restart it
+from a new position, etc.
+</p>
+<p>If you use the logfile feature of ddrescue, the data is rescued very
+efficiently, (only the needed blocks are read). Also you can interrupt
+the rescue at any time and resume it later at the same point.
+</p>
+<p>Ddrescue does not write zeros to the output when it finds bad sectors in
+the input, and does not truncate the output file if not asked to. So,
+every time you run it on the same output file, it tries to fill in the
+gaps without wiping out the data already rescued.
+</p>
+<p>Automatic merging of backups: If you have two or more damaged copies of
+a file, cdrom, etc, and run ddrescue on all of them, one at a time, with
+the same output file, you will probably obtain a complete and error-free
+file. This is so because the probability of having the same area damaged
+in all copies is low (if the errors are randomly located). Using the
+logfile, only the needed blocks are read from the second and successive
+copies.
+</p>
+<p>Ddrescue recommends lzip for compression of backups because the lzip
+format is designed for long-term data archiving and provides data
+recovery capabilities which nicely complement those of ddrescue.
+(Ddrescue fills unreadable sectors with data from other copies, while
+lziprecover corrects corrupt sectors with data from other copies). If
+the cause of file corruption is damaged media, the combination ddrescue
++ lziprecover is the best option for recovering data from multiple
+damaged copies. See <a href="Examples.html#lziprecover_002dexample">lziprecover-example</a>, for an example.
+</p>
+<p>Recordable CD and DVD media keep their data only for a finite time
+(typically for many years). After that time, data loss develops slowly
+with read errors growing from the outer media region towards the inside.
+Just make two (or more) copies of every important CD/DVD you burn so
+that you can later recover them with ddrescue.
+</p>
+<p>Because ddrescue needs to read and write at random places, it only works
+on seekable (random access) input and output files.
+</p>
+<p>If your system supports it, ddrescue can use direct disc access to read
+the input file, bypassing the kernel cache.
+</p>
+<p>Ddrescue also features a &quot;fill mode&quot; able to selectively overwrite parts
+of the output file, which has a number of interesting uses like wiping
+data, marking bad areas or even, in some cases, &quot;repair&quot; damaged
+sectors.
+</p>
+<p>One of the great strengths of ddrescue is that it is interface-agnostic,
+and so can be used for any kind of device supported by your kernel (ATA,
+SATA, SCSI, old MFM drives, floppy discs, or even flash media cards like
+SD).
+</p>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Basic-concepts.html#Basic-concepts" accesskey="n" rel="next">Basic concepts</a>, Previous: <a href="index.html#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

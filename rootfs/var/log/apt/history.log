@@ -1,0 +1,45 @@
+
+Start-Date: 2018-02-25  17:35:45
+Commandline: apt install gddrescue
+Install: gddrescue:armhf (1.19-1)
+End-Date: 2018-02-25  17:36:06
+
+Start-Date: 2018-02-25  17:41:59
+Commandline: apt-get --purge autoremove xz-utils
+Purge: xz-utils:armhf (5.1.1alpha+20120614-2), dpkg-dev:armhf (1.17.27), build-essential:armhf (11.7)
+End-Date: 2018-02-25  17:42:14
+
+Start-Date: 2018-02-25  17:43:18
+Commandline: apt-get --purge autoremove wireless-tools wireless-regdb
+Purge: libdpkg-perl:armhf (1.17.27), libfile-fcntllock-perl:armhf (0.22-1+b1), iw:armhf (3.17-1), fakeroot:armhf (1.20.2-1), libalgorithm-merge-perl:armhf (0.08-2), g++-4.9:armhf (4.9.2-10), libatomic1:armhf (4.9.2-10), libgcc-4.9-dev:armhf (4.9.2-10), patch:armhf (2.7.5-1), libalgorithm-diff-perl:armhf (1.19.02-3), g++:armhf (4.9.2-2), libstdc++-4.9-dev:armhf (4.9.2-10), libtimedate-perl:armhf (2.3000-2), wireless-tools:armhf (30~pre9-8), libasan1:armhf (4.9.2-10), gcc:armhf (4.9.2-2), libfakeroot:armhf (1.20.2-1), libgomp1:armhf (4.9.2-10), crda:armhf (3.13-1), libiw30:armhf (30~pre9-8), wireless-regdb:armhf (2016.06.10-1~deb8u1), gcc-4.9:armhf (4.9.2-10), libubsan0:armhf (4.9.2-10), libalgorithm-diff-xs-perl:armhf (0.04-3+b1)
+End-Date: 2018-02-25  17:43:54
+
+Start-Date: 2018-02-25  17:44:48
+Commandline: apt-get --purge autoremove samba*
+Purge: libtalloc2:armhf (2.1.2-0+deb8u1), samba-common:armhf (4.2.14+dfsg-0+deb8u6), cifs-utils:armhf (6.4-1), libwbclient0:armhf (4.2.14+dfsg-0+deb8u6)
+End-Date: 2018-02-25  17:45:12
+
+Start-Date: 2018-02-25  17:50:22
+Commandline: apt-get --purge autoremove bluez bluez-firmware
+Purge: bluez-firmware:armhf (1.2-3+rpi1), bluez:armhf (5.23-2+rpi2), pi-bluetooth:armhf (0.1.3)
+Error: Sub-process /usr/bin/dpkg returned an error code (1)
+End-Date: 2018-02-25  17:50:40
+
+Start-Date: 2018-02-25  17:51:00
+Commandline: apt-get -f install
+Error: Sub-process /usr/bin/dpkg returned an error code (1)
+End-Date: 2018-02-25  17:51:03
+
+Start-Date: 2018-02-25  17:52:00
+Commandline: apt-get -f install
+End-Date: 2018-02-25  17:52:03
+
+Start-Date: 2018-02-25  17:53:36
+Commandline: apt-get --purge autoremove python python-apt python-apt-common python-minimal python2.7 python2.7-minimal
+Purge: python2.7:armhf (2.7.9-2+deb8u1), python-minimal:armhf (2.7.9-1), apt-listchanges:armhf (2.85.13+nmu1), python-apt-common:armhf (0.9.3.12), python-rpi.gpio:armhf (0.6.3~jessie-1), python-apt:armhf (0.9.3.12), python2.7-minimal:armhf (2.7.9-2+deb8u1), lsb-release:armhf (4.1+Debian13+rpi1+nmu1), python-support:armhf (1.0.15), python:armhf (2.7.9-1)
+End-Date: 2018-02-25  17:53:48
+
+Start-Date: 2018-02-26  11:59:17
+Commandline: apt-get autoremove
+Remove: libpython-stdlib:armhf (2.7.9-1), iso-codes:armhf (3.57-1)
+End-Date: 2018-02-26  11:59:20

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Logfile structure</title>
+
+<meta name="description" content="GNU ddrescue Manual: Logfile structure">
+<meta name="keywords" content="GNU ddrescue Manual: Logfile structure">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Examples.html#Examples" rel="next" title="Examples">
+<link href="Invoking-ddrescue.html#Invoking-ddrescue" rel="prev" title="Invoking ddrescue">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Logfile-structure"></a>
+<div class="header">
+<p>
+Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Invoking-ddrescue.html#Invoking-ddrescue" accesskey="p" rel="prev">Invoking ddrescue</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Logfile-structure-1"></a>
+<h2 class="chapter">6 Logfile structure</h2>
+<a name="index-logfile-structure"></a>
+
+<p>The logfile is a text file easy to read and edit. It is formed by three
+parts, the heading comments, the status line, and the list of data
+blocks. Any line beginning with &lsquo;<samp>#</samp>&rsquo; is a comment line.
+</p>
+<p>The heading comments contain the version of ddrescue or ddrescuelog that
+created the logfile, the command line used, and the time when the
+program started. If the logfile was created by ddrescue it will also
+contain the current time when the logfile was saved and a copy of the
+status message from the screen describing the operation being performed
+(copying, trimming, finished, etc). They are intended as information for
+the user.
+</p>
+<p>The first non-comment line is the status line. It contains a
+non-negative integer and a status character. The integer is the position
+being tried in the input file. (The beginning of the block being tried
+in a forward pass or the end of the block in a backward pass). The
+status character is one of these:
+</p>
+<table>
+<tr><td>Character</td><td>Meaning</td></tr>
+<tr><td>&rsquo;?&rsquo;</td><td>copying non-tried blocks</td></tr>
+<tr><td>&rsquo;*&rsquo;</td><td>trimming non-trimmed blocks</td></tr>
+<tr><td>&rsquo;/&rsquo;</td><td>scraping non-scraped blocks</td></tr>
+<tr><td>&rsquo;-&rsquo;</td><td>retrying bad sectors</td></tr>
+<tr><td>&rsquo;F&rsquo;</td><td>filling specified blocks</td></tr>
+<tr><td>&rsquo;G&rsquo;</td><td>generating approximate logfile</td></tr>
+<tr><td>&rsquo;+&rsquo;</td><td>finished</td></tr>
+</table>
+
+<p>The blocks in the list of data blocks must be contiguous and
+non-overlapping.
+</p>
+<p>Every line in the list of data blocks describes a block of data. It
+contains 2 non-negative integers and a status character. The first
+integer is the starting position of the block in the input file, the
+second integer is the size (in bytes) of the block. The status character
+is one of these:
+</p>
+<table>
+<tr><td>Character</td><td>Meaning</td></tr>
+<tr><td>&rsquo;?&rsquo;</td><td>non-tried block</td></tr>
+<tr><td>&rsquo;*&rsquo;</td><td>failed block non-trimmed</td></tr>
+<tr><td>&rsquo;/&rsquo;</td><td>failed block non-scraped</td></tr>
+<tr><td>&rsquo;-&rsquo;</td><td>failed block bad-sector(s)</td></tr>
+<tr><td>&rsquo;+&rsquo;</td><td>finished block</td></tr>
+</table>
+
+<p>And here is an example logfile:
+</p>
+<div class="example">
+<pre class="example"># Rescue Logfile. Created by GNU ddrescue version 1.19
+# Command line: ddrescue -d -c18 /dev/fd0 fdimage logfile
+# Start time:   2014-05-03 09:37:44
+# Current time: 2014-05-03 09:38:19
+# Copying non-tried blocks... Pass 1 (forwards)
+# current_pos  current_status
+0x00120000     ?
+#      pos        size  status
+0x00000000  0x00117000  +
+0x00117000  0x00000200  -
+0x00117200  0x00001000  /
+0x00118200  0x00007E00  *
+0x00120000  0x00048000  ?
+</pre></div>
+
+<p>If you edit the file, you may use decimal, hexadecimal or octal values,
+using the same syntax as integer constants in C++.
+</p>
+<p>NOTE: Logfiles generated by a version of ddrescue prior to 1.6 lack the
+status line. If you want to use an old logfile with ddrescue 1.6 or
+later, you will have to insert a line like &lsquo;<samp>0 +</samp>&rsquo; at the beginning
+of the logfile.
+</p>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Examples.html#Examples" accesskey="n" rel="next">Examples</a>, Previous: <a href="Invoking-ddrescue.html#Invoking-ddrescue" accesskey="p" rel="prev">Invoking ddrescue</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Algorithm</title>
+
+<meta name="description" content="GNU ddrescue Manual: Algorithm">
+<meta name="keywords" content="GNU ddrescue Manual: Algorithm">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Invoking-ddrescue.html#Invoking-ddrescue" rel="next" title="Invoking ddrescue">
+<link href="Important-advice.html#Important-advice" rel="prev" title="Important advice">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Algorithm"></a>
+<div class="header">
+<p>
+Next: <a href="Invoking-ddrescue.html#Invoking-ddrescue" accesskey="n" rel="next">Invoking ddrescue</a>, Previous: <a href="Important-advice.html#Important-advice" accesskey="p" rel="prev">Important advice</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Algorithm-1"></a>
+<h2 class="chapter">4 Algorithm</h2>
+<a name="index-algorithm"></a>
+
+<p>GNU ddrescue is not a derivative of dd, nor is related to dd in any way
+except in that both can be used for copying data from one device to
+another. The key difference is that ddrescue uses a sophisticated
+algorithm to copy data from failing drives causing them as little
+additional damage as possible.
+</p>
+<p>Ddrescue manages efficiently the status of the rescue in progress and
+tries to rescue the good parts first, scheduling reads inside bad (or
+slow) areas for later. This maximizes the amount of data that can be
+finally recovered from a failing drive.
+</p>
+<p>The standard dd utility can be used to save data from a failing drive,
+but it reads the data sequentially, which may wear out the drive without
+rescuing anything if the errors are at the beginning of the drive.
+</p>
+<p>Other programs read the data sequentially but switch to small size reads
+when they find errors. This is a bad idea because it means spending more
+time at error areas, damaging the surface, the heads and the drive
+mechanics, instead of getting out of them as fast as possible. This
+behavior reduces the chances of rescuing the remaining good data.
+</p>
+<p>The algorithm of ddrescue is as follows (the user may interrupt the
+process at any point, but be aware that a bad drive can block ddrescue
+for a long time until the kernel gives up):
+</p>
+<p>1) Optionally read a logfile describing the status of a multi-part or
+previously interrupted rescue. If no logfile is specified or is empty or
+does not exist, mark all the rescue domain as non-tried.
+</p>
+<p>2) (First phase; Copying) Read the non-tried parts of the input file,
+marking the failed blocks as non-trimmed and skipping beyond them. Skip
+also beyond slow areas. The skipped areas are tried later in two
+additional passes (before trimming), reversing the direction after each
+pass until all the rescue domain is tried. The third pass is a sweeping
+pass, with skipping disabled. (The purpose is to delimit large errors
+fast, keep the logfile small, and produce good starting points for
+trimming). Only non-tried areas are read in large blocks. Trimming,
+scraping and retrying are done sector by sector. Each sector is tried at
+most two times; the first in this step as part of a large block read,
+the second in one of the steps below as a single sector read.
+</p>
+<p>3) (Second phase; Trimming) Trimming is done in one pass. For each
+non-trimmed block, read forwards one sector at a time from the leading
+edge of the block until a bad sector is found. Then read backwards one
+sector at a time from the trailing edge of the block until a bad sector
+is found. Then mark the bad sectors found (if any) as bad-sector, and
+mark the rest of the block as non-scraped without trying to read it.
+</p>
+<p>4) (Third phase; Scraping) Scrape together the data not recovered by the
+copying or trimming phases. Scraping is done in one pass. Each
+non-scraped block is read forwards, one sector at a time. Any bad
+sectors found are marked as bad-sector.
+</p>
+<p>5) (Fourth phase; Retrying) Optionally try to read again the bad sectors
+until the specified number of retry passes is reached. The direction is
+reversed after each pass. Every bad sector is tried only once in each
+pass. Ddrescue can&rsquo;t know if a bad sector is unrecoverable or if it will
+be eventually read after some retries.
+</p>
+<p>6) Optionally write a logfile for later use.
+</p>
+<br>
+<p>The total error size (&lsquo;<samp>errsize</samp>&rsquo;) is sum of the sizes of all the
+non-trimmed, non-scraped and bad-sector blocks. It increases during the
+copying phase and may decrease during trimming, scraping and retrying.
+Note that as ddrescue scrapes or retries the failed blocks, the good
+data found may divide them into smaller blocks, decreasing the total
+error size but increasing the number of errors.
+</p>
+<p>The logfile is periodically saved to disc, as well as when ddrescue
+finishes or is interrupted. So in case of a crash you can resume the
+rescue with little recopying. The interval between saves varies from 30
+seconds to 5 minutes depending on logfile size (larger logfiles are
+saved at longer intervals).
+</p>
+<p>Also, the same logfile can be used for multiple commands that copy
+different areas of the input file, and for multiple recovery attempts
+over different subsets. See this example:
+</p>
+<p>Rescue the most important part of the disc first.
+</p><div class="example">
+<pre class="example">ddrescue -i0 -s50MiB /dev/hdc hdimage logfile
+ddrescue -i0 -s1MiB -d -r3 /dev/hdc hdimage logfile
+</pre></div>
+
+<p>Then rescue some key disc areas.
+</p><div class="example">
+<pre class="example">ddrescue -i30GiB -s10GiB /dev/hdc hdimage logfile
+ddrescue -i230GiB -s5GiB /dev/hdc hdimage logfile
+</pre></div>
+
+<p>Now rescue the rest (does not recopy what is already done).
+</p><div class="example">
+<pre class="example">ddrescue /dev/hdc hdimage logfile
+ddrescue -d -r3 /dev/hdc hdimage logfile
+</pre></div>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Invoking-ddrescue.html#Invoking-ddrescue" accesskey="n" rel="next">Invoking ddrescue</a>, Previous: <a href="Important-advice.html#Important-advice" accesskey="p" rel="prev">Important advice</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

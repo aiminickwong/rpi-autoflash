@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Basic concepts</title>
+
+<meta name="description" content="GNU ddrescue Manual: Basic concepts">
+<meta name="keywords" content="GNU ddrescue Manual: Basic concepts">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Important-advice.html#Important-advice" rel="next" title="Important advice">
+<link href="Introduction.html#Introduction" rel="prev" title="Introduction">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Basic-concepts"></a>
+<div class="header">
+<p>
+Next: <a href="Important-advice.html#Important-advice" accesskey="n" rel="next">Important advice</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Basic-concepts-1"></a>
+<h2 class="chapter">2 Basic concepts</h2>
+<a name="index-basic-concepts"></a>
+
+<dl compact="compact">
+<dt>Block</dt>
+<dd><p>Any amount of data. A block is described by its starting position and
+its size. The starting position (or beginning position) is the lowest
+position in the block. The end of the block is its starting position
+plus its size.
+</p>
+</dd>
+<dt>Cluster</dt>
+<dd><p>Group of consecutive sectors read or written in one go.
+</p>
+</dd>
+<dt>Device</dt>
+<dd><p>Piece of hardware containing data. Hard disc drives, cdrom drives, USB
+pendrives, are devices. /dev/hda, /dev/sdb, are device names.
+</p>
+</dd>
+<dt>File</dt>
+<dd><p>Files are named units of data which are stored by the operating system
+for you to retrieve later by name. Devices and partitions are accessed
+by means of their associated file names.
+</p>
+</dd>
+<dt>Partition</dt>
+<dd><p>Every part in which a device is divided. A partition normally contains a
+file system. /dev/hda1, /dev/sdb3, are partition names.
+</p>
+</dd>
+<dt>Recoverable formats</dt>
+<dd><p>As ddrescue uses standard library functions to read data from the device
+being rescued, only mountable device formats can be rescued with
+ddrescue. DVDs can be mounted and they can be rescued, &quot;compact disc
+digital audio&quot; CDs can&rsquo;t, &quot;video CDs&quot;[1] maybe.<br>
+[1] http://en.wikipedia.org/wiki/Video_CD
+</p>
+</dd>
+<dt>Rescue domain</dt>
+<dd><p>Block or set of blocks to be acted upon (rescued, listed, etc). You can
+define it with the options &lsquo;<samp>--input-position</samp>&rsquo;, &lsquo;<samp>--size</samp>&rsquo; and
+&lsquo;<samp>--domain-logfile</samp>&rsquo;. The rescue domain defaults to the whole input
+file or logfile.
+</p>
+<p>The amount of data rescued, number of errors, etc, shown by ddrescue may
+vary or even become zero if you limit the rescue domain. Don&rsquo;t worry,
+they have not disappeared; they are simply out of the specified rescue
+domain.
+</p>
+</dd>
+<dt>Sector</dt>
+<dd><p>Hardware block. Smallest accessible amount of data on a device.
+</p>
+</dd>
+</dl>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Important-advice.html#Important-advice" accesskey="n" rel="next">Important advice</a>, Previous: <a href="Introduction.html#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

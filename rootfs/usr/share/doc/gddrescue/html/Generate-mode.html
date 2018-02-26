@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Generate mode</title>
+
+<meta name="description" content="GNU ddrescue Manual: Generate mode">
+<meta name="keywords" content="GNU ddrescue Manual: Generate mode">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Ddrescuelog.html#Ddrescuelog" rel="next" title="Ddrescuelog">
+<link href="Fill-mode.html#Fill-mode" rel="prev" title="Fill mode">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Generate-mode"></a>
+<div class="header">
+<p>
+Next: <a href="Ddrescuelog.html#Ddrescuelog" accesskey="n" rel="next">Ddrescuelog</a>, Previous: <a href="Fill-mode.html#Fill-mode" accesskey="p" rel="prev">Fill mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Generate-mode-1"></a>
+<h2 class="chapter">10 Generate mode</h2>
+<a name="index-generate-Mode"></a>
+
+<p>NOTE: When ddrescue is invoked with the &lsquo;<samp>--generate-mode</samp>&rsquo; option it
+operates in &quot;generate mode&quot;, which is different from the default &quot;rescue
+mode&quot;. That is, if you use the &lsquo;<samp>--generate-mode</samp>&rsquo; option, ddrescue
+does not rescue anything. It only tries to generate a logfile for later
+use.
+</p>
+<p>So you didn&rsquo;t read the tutorial and started ddrescue without a logfile.
+Now, two days later, your computer crashed and you can&rsquo;t know how much
+data ddrescue managed to save. And even worse, you can&rsquo;t resume the
+rescue; you have to restart it from the very beginning.
+</p>
+<p>Or maybe you started copying a drive with <code>dd&nbsp;conv=noerror,sync</code><!-- /@w --> and are now in the same situation described above.
+In this case, note that you can&rsquo;t use a copy made by dd unless it was
+invoked with the &lsquo;<samp>sync</samp>&rsquo; conversion argument.
+</p>
+<p>Don&rsquo;t despair (yet). Ddrescue can in some cases generate an approximate
+logfile, from the input file and the (partial) copy, that is almost as
+good as an exact logfile. It makes this by simply assuming that sectors
+containing all zeros were not rescued.
+</p>
+<p>However, if the destination of the copy was a drive or a partition, (or
+an existing regular file and truncation was not requested), most
+probably you will need to restart ddrescue from the very beginning.
+(This time with a logfile, of course). The reason is that old data may
+be present in the drive that have not been overwritten yet, and may be
+thus non-tried but non-zero.
+</p>
+<p>For example, if you first tried one of these commands:
+</p><div class="example">
+<pre class="example">ddrescue infile outfile
+or
+dd if=infile of=outfile conv=noerror,sync
+</pre></div>
+
+<p>then you can generate an approximate logfile with this command:
+</p><div class="example">
+<pre class="example">ddrescue --generate-mode infile outfile logfile
+</pre></div>
+
+<p>Note that you must keep the original offset between
+&lsquo;<samp>--input-position</samp>&rsquo; and &lsquo;<samp>--output-position</samp>&rsquo; of the original
+rescue run.
+</p>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Ddrescuelog.html#Ddrescuelog" accesskey="n" rel="next">Ddrescuelog</a>, Previous: <a href="Fill-mode.html#Fill-mode" accesskey="p" rel="prev">Fill mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

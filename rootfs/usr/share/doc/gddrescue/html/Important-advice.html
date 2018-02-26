@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Important advice</title>
+
+<meta name="description" content="GNU ddrescue Manual: Important advice">
+<meta name="keywords" content="GNU ddrescue Manual: Important advice">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Algorithm.html#Algorithm" rel="next" title="Algorithm">
+<link href="Basic-concepts.html#Basic-concepts" rel="prev" title="Basic concepts">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Important-advice"></a>
+<div class="header">
+<p>
+Next: <a href="Algorithm.html#Algorithm" accesskey="n" rel="next">Algorithm</a>, Previous: <a href="Basic-concepts.html#Basic-concepts" accesskey="p" rel="prev">Basic concepts</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Using-ddrescue-safely"></a>
+<h2 class="chapter">3 Using ddrescue safely</h2>
+<a name="index-using-ddrescue-safely"></a>
+
+<p>Ddrescue is like any other power tool. You need to understand what it
+does, and you need to understand some things about the machines it does
+those things to, in order to use it safely.
+</p>
+<p>Always use a logfile unless you know you won&rsquo;t need it. Without a
+logfile, ddrescue can&rsquo;t resume a rescue, only reinitiate it.
+</p>
+<p>Never try to rescue a r/w mounted partition. The resulting copy may be
+useless.
+</p>
+<p>Never try to repair a file system on a drive with I/O errors; you will
+probably lose even more data.
+</p>
+<p>If you use a device or a partition as destination, any data stored there
+will be overwritten.
+</p>
+<p>Some systems may change device names on reboot (eg. udev enabled
+systems). If you reboot, check the device names before restarting
+ddrescue.
+</p>
+<p>If you interrupt the rescue and then reboot, any partially copied
+partitions should be hidden before allowing them to be touched by any
+operating system that tries to mount and &quot;fix&quot; the partitions it sees.
+</p>
+
+
+
+
+</body>
+</html>

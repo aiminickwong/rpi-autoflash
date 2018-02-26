@@ -1,0 +1,514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Invoking ddrescue</title>
+
+<meta name="description" content="GNU ddrescue Manual: Invoking ddrescue">
+<meta name="keywords" content="GNU ddrescue Manual: Invoking ddrescue">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Logfile-structure.html#Logfile-structure" rel="next" title="Logfile structure">
+<link href="Algorithm.html#Algorithm" rel="prev" title="Algorithm">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Invoking-ddrescue"></a>
+<div class="header">
+<p>
+Next: <a href="Logfile-structure.html#Logfile-structure" accesskey="n" rel="next">Logfile structure</a>, Previous: <a href="Algorithm.html#Algorithm" accesskey="p" rel="prev">Algorithm</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Invoking-ddrescue-1"></a>
+<h2 class="chapter">5 Invoking ddrescue</h2>
+<a name="index-invoking-ddrescue"></a>
+<a name="index-options"></a>
+<a name="index-usage"></a>
+<a name="index-version"></a>
+
+<p>The format for running ddrescue is:
+</p>
+<div class="example">
+<pre class="example">ddrescue [<var>options</var>] <var>infile</var> <var>outfile</var> [<var>logfile</var>]
+</pre></div>
+
+<p>ddrescue supports the following options:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>-h</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--help</samp>&rsquo;</dt>
+<dd><p>Print an informative help message describing the options and exit.
+</p>
+</dd>
+<dt>&lsquo;<samp>-V</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--version</samp>&rsquo;</dt>
+<dd><p>Print the version number of ddrescue on the standard output and exit.
+</p>
+</dd>
+<dt>&lsquo;<samp>-a <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--min-read-rate=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Minimum read rate of good non-tried areas, in bytes per second. If the
+read rate falls below this value, ddrescue will skip ahead a variable
+amount depending on rate and error histories. The skipped blocks are
+tried in additional passes (before trimming) where the minimum read rate
+is divided by ten before each pass, until there are no more non-tried
+blocks left.
+</p>
+<p>If <var>bytes</var> is 0 (auto), the minimum read rate is recalculated for
+each block as <span class="nolinebreak">(average_rate</span>&nbsp;/&nbsp;10)<!-- /@w -->. Values above device capabilities
+are ignored.
+</p>
+</dd>
+<dt>&lsquo;<samp>-A</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--try-again</samp>&rsquo;</dt>
+<dd><p>Mark all non-trimmed and non-scraped blocks inside the rescue domain as
+non-tried before beginning the rescue. Try this if the drive stops
+responding and ddrescue immediately starts scraping failed blocks when
+restarted. If &lsquo;<samp>--retrim</samp>&rsquo; is also specified, mark all failed blocks
+inside the rescue domain as non-tried.
+</p>
+</dd>
+<dt>&lsquo;<samp>-b <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--sector-size=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Sector (hardware block) size of input device in bytes (usually 512 for
+hard discs and 3.5&quot; floppies, 1024 for 5.25&quot; floppies, and 2048 for
+cdroms). Defaults to 512.
+</p>
+</dd>
+<dt>&lsquo;<samp>-B</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--binary-prefixes</samp>&rsquo;</dt>
+<dd><p>Show units with binary prefixes (powers of 1024).<br>
+SI prefixes (powers of 1000) are used by default. (See table below).
+</p>
+</dd>
+<dt>&lsquo;<samp>-c <var>sectors</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--cluster-size=<var>sectors</var></samp>&rsquo;</dt>
+<dd><p>Number of sectors to copy at a time. Defaults to 64&nbsp;KiB&nbsp;/&nbsp;<span class="nolinebreak">sector_size</span><!-- /@w -->.
+Try smaller values for slow drives. The number of sectors per track (18
+or 9) is a good value for floppies.
+</p>
+</dd>
+<dt>&lsquo;<samp>-C</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--complete-only</samp>&rsquo;</dt>
+<dd><p>Limit rescue domain to the blocks listed in the <var>logfile</var>. Do not
+read new data beyond <var>logfile</var> limits. This is useful when reading
+from devices of undefined size (like raw devices), when the drive
+returns an incorrect size, or when reading from a partial copy. It can
+only be used after a first rescue attempt, possibly limited with the
+&lsquo;<samp>--size</samp>&rsquo; option, has produced a complete <var>logfile</var>.
+</p>
+</dd>
+<dt>&lsquo;<samp>-d</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--direct</samp>&rsquo;</dt>
+<dd><p>Use direct disc access to read from <var>infile</var>, bypassing the kernel
+cache. (Open the file with the O_DIRECT flag). Use it only on devices or
+partitions, not on regular files. Sector size must be correctly set for
+this to work. Not all systems support this.
+</p>
+<p>If your system does not support direct disc access, ddrescue will warn
+you. If the sector size is not correctly set, all reads will result in
+errors, and no data will be rescued.
+</p>
+</dd>
+<dt>&lsquo;<samp>-D</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--synchronous</samp>&rsquo;</dt>
+<dd><p>Use synchronous writes for <var>outfile</var>. (Issue a fsync call after
+every write). May be useful when forcing the drive to remap its bad
+sectors.
+</p>
+</dd>
+<dt>&lsquo;<samp>-e [+]<var>n</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--max-errors=[+]<var>n</var></samp>&rsquo;</dt>
+<dd><p>Maximum number of error areas allowed before giving up. Defaults to
+infinity. If <var>n</var> is preceded by &lsquo;<samp>+</samp>&rsquo; the number refers to new
+error areas found in this run, not counting those already annotated in
+the <var>logfile</var>.
+</p>
+</dd>
+<dt>&lsquo;<samp>-E <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--max-error-rate=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Maximum rate of errors allowed before giving up, in bytes per second.
+Defaults to infinity. The rate being measured is that of actually failed
+reads, so the rescue may finish because of this rate being exceeded even
+if the total error size (errsize) does not change because the areas
+being tried are already marked as errors.
+</p>
+</dd>
+<dt>&lsquo;<samp>-f</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--force</samp>&rsquo;</dt>
+<dd><p>Force overwrite of <var>outfile</var>. Needed when <var>outfile</var> is not a
+regular file, but a device or partition. This option is just a safeguard
+to prevent the inadvertent destruction of partitions, and is ignored for
+regular files.
+</p>
+</dd>
+<dt>&lsquo;<samp>-F <var>types</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--fill-mode=<var>types</var></samp>&rsquo;</dt>
+<dd><p>Fill the blocks in <var>outfile</var> specified as any of <var>types</var> in
+<var>logfile</var>, with data read from <var>infile</var>. <var>types</var> contains
+one or more of the status characters defined in the chapter Logfile
+structure (see <a href="Logfile-structure.html#Logfile-structure">Logfile structure</a>). See the chapter Fill mode
+(see <a href="Fill-mode.html#Fill-mode">Fill mode</a>) for a complete description of the fill mode.
+</p>
+</dd>
+<dt>&lsquo;<samp>-G</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--generate-mode</samp>&rsquo;</dt>
+<dd><p>Generate an approximate <var>logfile</var> from the <var>infile</var> and
+<var>outfile</var> of the original rescue run. Note that you must keep the
+original offset between &lsquo;<samp>--input-position</samp>&rsquo; and
+&lsquo;<samp>--output-position</samp>&rsquo; of the original rescue run. See the chapter
+Generate mode (see <a href="Generate-mode.html#Generate-mode">Generate mode</a>) for a complete description of the
+generate mode.
+</p>
+</dd>
+<dt>&lsquo;<samp>-H <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--test-mode=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Builds a map of good/bad blocks using the logfile <var>file</var> and uses it
+to simulate read errors in <var>infile</var>. The blocks marked as finished
+in <var>file</var> will be read normally. All other block types will be
+considered read errors without even trying to read them from
+<var>infile</var>. This mode is an aid in improving the algorithm of ddrescue
+and is also useful to verify that ddrescue produces accurate results in
+presence of read errors.
+</p>
+</dd>
+<dt>&lsquo;<samp>-i <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--input-position=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Starting position of the rescue domain in <var>infile</var>, in bytes.
+Defaults to 0. This is not the point from which ddrescue starts copying.
+(For example, if you pass the &lsquo;<samp>--reverse</samp>&rsquo; option to ddrescue, it
+starts copying from the end of the rescue domain). In fill mode it
+refers to a position in the <var>infile</var> of the original rescue run. See
+the chapter Fill mode (see <a href="Fill-mode.html#Fill-mode">Fill mode</a>) for details.
+</p>
+</dd>
+<dt>&lsquo;<samp>-I</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--verify-input-size</samp>&rsquo;</dt>
+<dd><p>Compare the size of <var>infile</var> with the size calculated from the list
+of blocks contained in the <var>logfile</var>, and exit with status 1 if they
+differ. This is not enabled by default because the size of some devices
+can&rsquo;t be known in advance and because the size derived from the
+<var>logfile</var> may be incomplete, for example after doing a partial
+rescue.
+</p>
+</dd>
+<dt>&lsquo;<samp>-K [<var>initial</var>][,<var>max</var>]</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--skip-size=[<var>initial</var>][,<var>max</var>]</samp>&rsquo;</dt>
+<dd><p>Set limits to skip size during the copying phase. At least one of
+<var>initial</var> or <var>max</var> must be specified. <var>initial</var> is the size
+to skip on the first read error or slow read, in bytes. <var>max</var> is the
+maximum size to skip. The values given will be rounded to the next
+multiple of sector size. The skip size will be doubled for each read
+error or slow read until it reaches <var>max</var> or, if <var>max</var> is
+omitted, 1% of the size of <var>infile</var> or 1 GiB (whichever is smaller),
+and will be reset to <var>initial</var> when good data is found. Valid values
+range from 64 KiB to 1 GiB. <var>initial</var> defaults to 64 KiB. An
+<var>initial</var> value of 0 disables skipping entirely.
+</p>
+<p>If ddrescue is having difficulties skipping away from a large area with
+scattered errors, or if the device has large error areas at regular
+intervals, you can increase the initial skip size with this option.
+Inversely, if ddrescue is skipping too much, leaving large non-tried
+areas behind each error (which will be read later in the usually slower
+backwards direction), you can reduce the maximum skip size, or disable
+skipping.
+</p>
+<p>&lsquo;<samp>--skip-size</samp>&rsquo; is independent from &lsquo;<samp>--cluster-size</samp>&rsquo;. The size
+to skip is calculated from the end of the block that just failed.
+</p>
+</dd>
+<dt>&lsquo;<samp>-L</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--loose-domain</samp>&rsquo;</dt>
+<dd><p>Accept an incomplete synthetic (user fabricated) domain logfile or
+test-mode logfile and fill the gaps in the list of data blocks with
+non-tried blocks. The blocks in the logfile must be strictly ascending
+and non-overlapping, but they do not need to be contiguous. This option
+allows making quick edits to a logfile without all the size calculations
+involved in making all data blocks contiguous again.
+</p>
+</dd>
+<dt>&lsquo;<samp>-m <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--domain-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Restrict the rescue domain to the blocks marked as finished in the
+logfile <var>file</var>. This is useful for merging partially recovered
+images of backups, or if the destination drive fails during the rescue.
+</p>
+</dd>
+<dt>&lsquo;<samp>-M</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--retrim</samp>&rsquo;</dt>
+<dd><p>Mark all failed blocks inside the rescue domain as non-trimmed before
+beginning the rescue. The effect is similar to &lsquo;<samp>--retry-passes=1</samp>&rsquo;,
+but the bad sectors are tried in a different order, making perhaps
+possible to rescue some of them.
+</p>
+</dd>
+<dt>&lsquo;<samp>-n</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--no-scrape</samp>&rsquo;</dt>
+<dd><p>Skip the scraping phase. Avoids spending a lot of time trying to rescue
+the most difficult parts of the file.
+</p>
+</dd>
+<dt>&lsquo;<samp>-N</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--no-trim</samp>&rsquo;</dt>
+<dd><p>Skip the trimming phase. Specially useful in the first parts of a
+multi-part rescue.
+</p>
+</dd>
+<dt>&lsquo;<samp>-o <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--output-position=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Starting position of the image of the rescue domain in <var>outfile</var>, in
+bytes. Defaults to &lsquo;<samp>--input-position</samp>&rsquo;. The bytes below <var>bytes</var>
+aren&rsquo;t touched if they exist and truncation is not requested. Else they
+are set to 0.
+</p>
+</dd>
+<dt>&lsquo;<samp>-O</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--reopen-on-error</samp>&rsquo;</dt>
+<dd><p>Close <var>infile</var> and then reopen it after every read error and, if
+&lsquo;<samp>--min-read-rate</samp>&rsquo; is set, after every slow read encountered both
+during the copying phase. Use this option if you notice a permanent drop
+in transfer rate after finding read errors or slow areas. But be warned
+that most probably the slowing-down is intentionally caused by the
+kernel in an attempt to increase the probability of reading data from
+the device.
+</p>
+</dd>
+<dt>&lsquo;<samp>-p</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--preallocate</samp>&rsquo;</dt>
+<dd><p>Preallocate space on disc for <var>outfile</var>. Only space for regular
+files can be preallocated. If preallocation succeeds, rescue will not
+fail due to lack of free space on disc. If ddrescue can&rsquo;t determine the
+size to preallocate, you may need to specify it with some combination of
+the &lsquo;<samp>--input-position</samp>&rsquo;, &lsquo;<samp>--output-position</samp>&rsquo;, &lsquo;<samp>--size</samp>&rsquo;,
+and &lsquo;<samp>--domain-logfile</samp>&rsquo; options.
+</p>
+</dd>
+<dt>&lsquo;<samp>-P[<var>lines</var>]</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--data-preview[=<var>lines</var>]</samp>&rsquo;</dt>
+<dd><p>Show <var>lines</var> lines of the latest data read in &lsquo;<samp><span class="nolinebreak">16-byte</span>&nbsp;hex&nbsp;+&nbsp;ASCII</samp>&rsquo;<!-- /@w --> format. Valid values for <var>lines</var> range from 1 to 32. If
+<var>lines</var> is omitted, a default value of 3 is used.
+</p>
+</dd>
+<dt>&lsquo;<samp>-q</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--quiet</samp>&rsquo;</dt>
+<dd><p>Quiet operation. Suppress all messages.
+</p>
+</dd>
+<dt>&lsquo;<samp>-r <var>n</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--retry-passes=<var>n</var></samp>&rsquo;</dt>
+<dd><p>Exit after given number of retry passes. Defaults to 0. -1 means
+infinity. Every bad sector is tried only once in each pass. To retry bad
+sectors detected on a previous run, you must specify a non-zero number
+of retry passes.
+</p>
+</dd>
+<dt>&lsquo;<samp>-R</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--reverse</samp>&rsquo;</dt>
+<dd><p>Reverse the direction of all passes (copying, trimming, scraping and
+retrying). Every pass that is normally run forwards will now be run
+backwards, and vice versa. &lsquo;<samp>--reverse</samp>&rsquo; does not modify the size of
+the blocks copied during each phase, just the order in which they are
+tried.
+</p>
+</dd>
+<dt>&lsquo;<samp>-s <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--size=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Maximum size of the rescue domain, in bytes. It limits the amount of
+input data to be copied. If ddrescue can&rsquo;t determine the size of the
+input device, you may need to specify it with this option. Note that
+this option does not specify the size of the resulting <var>outfile</var>.
+For example, the following command creates an <var>outfile</var> 300 bytes
+long, but only writes data on the last 200 bytes:
+</p>
+<div class="example">
+<pre class="example">ddrescue -i 100 -s 200 infile outfile logfile
+</pre></div>
+
+</dd>
+<dt>&lsquo;<samp>-S</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--sparse</samp>&rsquo;</dt>
+<dd><p>Use sparse writes for <var>outfile</var>. (The blocks of zeros are not
+actually allocated on disc). May save a lot of disc space in some cases.
+Not all systems support this. Only regular files can be sparse.
+</p>
+</dd>
+<dt>&lsquo;<samp>-t</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--truncate</samp>&rsquo;</dt>
+<dd><p>Truncate <var>outfile</var> to zero size before writing to it. Only works for
+regular files, not for drives or partitions.
+</p>
+</dd>
+<dt>&lsquo;<samp>-T <var>interval</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--timeout=<var>interval</var></samp>&rsquo;</dt>
+<dd><p>Maximum time since last successful read allowed before giving up.
+Defaults to infinity. <var>interval</var> is a rational number (like 1.5 or
+1/2) optionally followed by one of &lsquo;<samp>s</samp>&rsquo;, &lsquo;<samp>m</samp>&rsquo;, &lsquo;<samp>h</samp>&rsquo; or
+&lsquo;<samp>d</samp>&rsquo;, meaning seconds, minutes, hours and days respectively. If no
+unit is specified, it defaults to seconds.
+</p>
+</dd>
+<dt>&lsquo;<samp>-u</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--unidirectional</samp>&rsquo;</dt>
+<dd><p>Run all passes in the same direction. Forwards by default, or backwards
+if the option &lsquo;<samp>--reverse</samp>&rsquo; is also given.
+</p>
+</dd>
+<dt>&lsquo;<samp>-v</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--verbose</samp>&rsquo;</dt>
+<dd><p>Verbose mode. Further -v&rsquo;s (up to 4) increase the verbosity level.
+</p>
+</dd>
+<dt>&lsquo;<samp>-w</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--ignore-write-errors</samp>&rsquo;</dt>
+<dd><p>Make fill mode ignore write errors. This is useful to avoid ddrescue
+exiting because of new errors developing while wiping the good sectors
+of a failing drive. Fill mode normally writes to <var>outfile</var> one
+cluster at a time. With this option, after the first write error is
+found in an area, the rest of that area is filled sector by sector.
+</p>
+</dd>
+<dt>&lsquo;<samp>-x <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--extend-outfile=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Extend the size of <var>outfile</var> to make it at least <var>bytes</var> long.
+If the size of <var>outfile</var> is already equal or longer than <var>bytes</var>
+then this option does nothing. Use this option to guarantee a minimum
+size for <var>outfile</var>. Only regular files can be extended.
+</p>
+</dd>
+<dt>&lsquo;<samp>-X</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--exit-on-error</samp>&rsquo;</dt>
+<dd><p>Exit after the first read error is encountered during the copying phase.
+This is similar but different to &lsquo;<samp>--timeout=0</samp>&rsquo;, which waits until
+the screen status is refreshed (at least 1 second). If there is at least
+one successful read per second, &lsquo;<samp>--timeout=0</samp>&rsquo; does not make
+ddrescue to exit.
+</p>
+<p>This is also similar but different to &lsquo;<samp>--max-errors=+0</samp>&rsquo;, which
+exits when a new error area is found. If the read errors are adjacent to
+existing error areas, no new error areas are produced (just enlarged),
+and &lsquo;<samp>--max-errors=+0</samp>&rsquo; does not make ddrescue to exit.
+</p>
+</dd>
+<dt>&lsquo;<samp>-1 <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--log-rates=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Log rates and error sizes every second in <var>file</var>. If <var>file</var>
+already exists, it will be overwritten. Every time the screen is updated
+with new details, some of those details (time, input position, current
+and average rates, number of errors and error size) are written to
+<var>file</var> in a format usable by plotting utilities like gnuplot. This
+allows a posterior analysis of the drive to see if it has any weak zones
+(areas where the transfer rate drops well below the sustained average).
+</p>
+</dd>
+<dt>&lsquo;<samp>-2 <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--log-reads=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Log all read operations in <var>file</var>. If <var>file</var> already exists, it
+will be overwritten. Every read attempt and its result (position, size,
+copied size and error size) is written to <var>file</var>. (The position
+written is always the beginning of the block tried, even if reading
+backwards). A line is also written at the beginning of each phase
+(copying, trimming, scraping and retrying). Finally, a line with a time
+mark is written every second (unless the read takes more time). Use this
+option with caution because <var>file</var> may become very large very
+quickly. Use lzip to compress <var>file</var> if you need to store or
+transmit it.
+</p>
+</dd>
+<dt>&lsquo;<samp>--ask</samp>&rsquo;</dt>
+<dd><p>Ask for user confirmation before starting the copy. If the first letter
+of the answer is &lsquo;<samp>y</samp>&rsquo;, ddrescue starts copying. Else it exits with
+status 1.<br>
+If they can be obtained, ddrescue shows the model and serial number of
+the input and output devices. Else it shows the size in bytes of the
+corresponding file or device.
+</p>
+</dd>
+<dt>&lsquo;<samp>--cpass=<var>n</var>[,<var>n</var>]</samp>&rsquo;</dt>
+<dd><p>Select what pass(es) to run during the copying phase. Valid values for
+<var>n</var> range from 0 to 3. &lsquo;<samp>--cpass=0</samp>&rsquo; skips the copying phase
+entirely. To run only the given pass(es), specify also &lsquo;<samp>--no-trim</samp>&rsquo;
+and &lsquo;<samp>--no-scrape</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>--pause=<var>interval</var></samp>&rsquo;</dt>
+<dd><p>Time to wait between passes. Defaults to 0. <var>interval</var> is formatted
+as in the option &lsquo;<samp>--timeout</samp>&rsquo; above.
+</p>
+</dd>
+</dl>
+
+<p>Numbers given as arguments to options (positions, sizes, rates, etc) may
+be expressed as decimal, hexadecimal or octal values (using the same
+syntax as integer constants in C++), and may be followed by a multiplier
+and an optional &lsquo;<samp>B</samp>&rsquo; for &quot;byte&quot;.
+</p>
+<p>Table of SI and binary prefixes (unit multipliers):
+</p>
+<table>
+<tr><td>Prefix</td><td>Value</td><td>|</td><td>Prefix</td><td>Value</td></tr>
+<tr><td></td><td></td><td>|</td><td>s</td><td>sectors</td></tr>
+<tr><td>k</td><td>kilobyte  (10^3 = 1000)</td><td>|</td><td>Ki</td><td>kibibyte (2^10 = 1024)</td></tr>
+<tr><td>M</td><td>megabyte  (10^6)</td><td>|</td><td>Mi</td><td>mebibyte (2^20)</td></tr>
+<tr><td>G</td><td>gigabyte  (10^9)</td><td>|</td><td>Gi</td><td>gibibyte (2^30)</td></tr>
+<tr><td>T</td><td>terabyte  (10^12)</td><td>|</td><td>Ti</td><td>tebibyte (2^40)</td></tr>
+<tr><td>P</td><td>petabyte  (10^15)</td><td>|</td><td>Pi</td><td>pebibyte (2^50)</td></tr>
+<tr><td>E</td><td>exabyte   (10^18)</td><td>|</td><td>Ei</td><td>exbibyte (2^60)</td></tr>
+<tr><td>Z</td><td>zettabyte (10^21)</td><td>|</td><td>Zi</td><td>zebibyte (2^70)</td></tr>
+<tr><td>Y</td><td>yottabyte (10^24)</td><td>|</td><td>Yi</td><td>yobibyte (2^80)</td></tr>
+</table>
+
+<br>
+<p>Exit status: 0 for a normal exit, 1 for environmental problems (file not
+found, invalid flags, I/O errors, etc), 2 to indicate a corrupt or
+invalid input file, 3 for an internal consistency error (eg, bug) which
+caused ddrescue to panic.
+</p>
+<p>If ddrescue is interrupted by a signal, it updates the logfile and then
+terminates by raising the signal received.
+</p>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Logfile-structure.html#Logfile-structure" accesskey="n" rel="next">Logfile structure</a>, Previous: <a href="Algorithm.html#Algorithm" accesskey="p" rel="prev">Algorithm</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

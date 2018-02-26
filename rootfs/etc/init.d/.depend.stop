@@ -1,0 +1,9 @@
+TARGETS = ssh dhcpcd fake-hwclock triggerhappy bluetooth avahi-daemon urandom alsa-utils plymouth sendsigs rsyslog umountnfs.sh rpcbind nfs-common hwclock.sh networking umountfs umountroot halt reboot
+sendsigs: alsa-utils triggerhappy plymouth bluetooth avahi-daemon
+rsyslog: sendsigs bluetooth avahi-daemon
+umountnfs.sh: alsa-utils rsyslog triggerhappy plymouth sendsigs bluetooth avahi-daemon
+networking: umountnfs.sh rpcbind
+umountfs: alsa-utils urandom dhcpcd hwclock.sh umountnfs.sh rpcbind networking triggerhappy plymouth bluetooth avahi-daemon
+umountroot: fake-hwclock umountfs
+halt: umountroot
+reboot: umountroot

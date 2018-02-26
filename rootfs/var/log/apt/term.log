@@ -1,0 +1,54 @@
+
+Log started: 2018-02-25  17:35:45
+Log ended: 2018-02-25  17:36:06
+
+Log started: 2018-02-25  17:41:59
+Log ended: 2018-02-25  17:42:14
+
+Log started: 2018-02-25  17:43:18
+Log ended: 2018-02-25  17:43:54
+
+Log started: 2018-02-25  17:44:48
+Log ended: 2018-02-25  17:45:12
+
+Log started: 2018-02-25  17:50:22
+Log ended: 2018-02-25  17:50:40
+
+Log started: 2018-02-25  17:51:00
+Log ended: 2018-02-25  17:51:03
+
+Log started: 2018-02-25  17:52:00
+Setting up bluez (5.23-2+rpi2) ...
+[....] Reloading system message bus config...Failed to open connection to "system" message bus: Failed to connect to socket /var/run/dbus/system_bus_socket: No such file or directory
+invoke-rc.d: initscript dbus, action "force-reload" failed.
+[....] Stopping bluetooth: /usr/sbin/bluetoothd[?25l[?1c7[1G[[32m ok [39;49m8[?25h[?0c.
+[....] Starting bluetooth: bluetoothd[?25l[?1c7[1G[[32m ok [39;49m8[?25h[?0c.
+Log ended: 2018-02-25  17:52:03
+
+Log started: 2018-02-25  17:53:36
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 29902 files and directories currently installed.)
+Removing apt-listchanges (2.85.13+nmu1) ...
+Purging configuration files for apt-listchanges (2.85.13+nmu1) ...
+Removing lsb-release (4.1+Debian13+rpi1+nmu1) ...
+Purging configuration files for lsb-release (4.1+Debian13+rpi1+nmu1) ...
+Removing python-rpi.gpio (0.6.3~jessie-1) ...
+Removing python-support (1.0.15) ...
+Purging configuration files for python-support (1.0.15) ...
+Removing python-apt (0.9.3.12) ...
+Removing python-apt-common (0.9.3.12) ...
+Removing python (2.7.9-1) ...
+Purging configuration files for python (2.7.9-1) ...
+Removing python-minimal (2.7.9-1) ...
+Removing python2.7 (2.7.9-2+deb8u1) ...
+Purging configuration files for python2.7 (2.7.9-2+deb8u1) ...
+Removing python2.7-minimal (2.7.9-2+deb8u1) ...
+Unlinking and removing bytecode for runtime python2.7
+Purging configuration files for python2.7-minimal (2.7.9-2+deb8u1) ...
+Processing triggers for man-db (2.7.5-1~bpo8+1) ...
+/usr/bin/mandb: can't write to /var/cache/man/2205: No space left on device
+/usr/bin/mandb: can't create index cache /var/cache/man/2205: No space left on device
+Processing triggers for mime-support (3.58) ...
+Log ended: 2018-02-25  17:53:48
+
+Log started: 2018-02-26  11:59:17
+Log ended: 2018-02-26  11:59:20

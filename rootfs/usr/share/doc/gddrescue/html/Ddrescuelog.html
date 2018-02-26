@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Ddrescuelog</title>
+
+<meta name="description" content="GNU ddrescue Manual: Ddrescuelog">
+<meta name="keywords" content="GNU ddrescue Manual: Ddrescuelog">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Invoking-ddrescuelog.html#Invoking-ddrescuelog" rel="next" title="Invoking ddrescuelog">
+<link href="Generate-mode.html#Generate-mode" rel="prev" title="Generate mode">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Ddrescuelog"></a>
+<div class="header">
+<p>
+Next: <a href="Invoking-ddrescuelog.html#Invoking-ddrescuelog" accesskey="n" rel="next">Invoking ddrescuelog</a>, Previous: <a href="Generate-mode.html#Generate-mode" accesskey="p" rel="prev">Generate mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Ddrescuelog-1"></a>
+<h2 class="chapter">11 Ddrescuelog</h2>
+<a name="index-ddrescuelog"></a>
+
+<p>Ddrescuelog is a tool that manipulates ddrescue logfiles, shows logfile
+contents, converts logfiles to/from other formats, compares logfiles,
+tests rescue status, and can delete a logfile if the rescue is done.
+Ddrescuelog operations can be restricted to one or several parts of the
+logfile if the domain setting options are used.
+</p>
+<p>When performing logic operations (AND, OR, XOR) on logfiles of different
+extension, only the blocks present in both files are processed.
+</p>
+<p>Here are some examples of how to use ddrescuelog, alone or in
+combination with other tools.
+</p>
+<br>
+<p>Example 1: Delete the logfile if the rescue is finished (all data is
+recovered without errors left).
+</p>
+<div class="example">
+<pre class="example">ddrescue -f /dev/hda /dev/hdb logfile
+ddrescuelog -d logfile
+</pre></div>
+
+<br>
+<p>Example 2: Rescue two ext2 partitions in /dev/hda to
+/dev/hdb and repair the file systems using badblock lists generated with
+ddrescuelog. File system block size is 4096.<br>
+Note: you do need to partition /dev/hdb beforehand.
+</p>
+<div class="example">
+<pre class="example">fdisk /dev/hdb                                &lt;-- partition /deb/hdb
+ddrescue -f /dev/hda1 /dev/hdb1 logfile1
+ddrescue -f /dev/hda2 /dev/hdb2 logfile2
+ddrescuelog -l- -b4096 logfile1 &gt; badblocks1
+ddrescuelog -l- -b4096 logfile2 &gt; badblocks2
+e2fsck -v -f -L badblocks1 /dev/hdb1
+e2fsck -v -f -L badblocks2 /dev/hdb2
+</pre></div>
+
+<br>
+<p>Example 3: Rescue a whole disc with two ext2 partitions in /dev/hda to
+/dev/hdb and repair the file systems using badblock lists generated with
+ddrescuelog. Disc sector size is 512, file system block size is 4096.
+Arguments to options &lsquo;<samp>-i</samp>&rsquo; and &lsquo;<samp>-s</samp>&rsquo; are the starting positions
+and sizes of the partitions being rescued.<br>
+Note: you do not need to partition /dev/hdb beforehand, but if the
+partition table on /dev/hda is damaged, you&rsquo;ll need to recreate it
+somehow on /dev/hdb.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f /dev/hda /dev/hdb logfile
+fdisk /dev/hdb                                &lt;-- get partition sizes
+ddrescuelog -l- -b512 -i63b -o0 -s9767457b -b4096 logfile &gt; badblocks1
+ddrescuelog -l- -b512 -i9767520b -o0 -s128520b -b4096 logfile &gt; badblocks2
+e2fsck -v -f -L badblocks1 /dev/hdb1
+e2fsck -v -f -L badblocks2 /dev/hdb2
+</pre></div>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Invoking-ddrescuelog.html#Invoking-ddrescuelog" accesskey="n" rel="next">Invoking ddrescuelog</a>, Previous: <a href="Generate-mode.html#Generate-mode" accesskey="p" rel="prev">Generate mode</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Direct disc access</title>
+
+<meta name="description" content="GNU ddrescue Manual: Direct disc access">
+<meta name="keywords" content="GNU ddrescue Manual: Direct disc access">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Fill-mode.html#Fill-mode" rel="next" title="Fill mode">
+<link href="Examples.html#Examples" rel="prev" title="Examples">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Direct-disc-access"></a>
+<div class="header">
+<p>
+Next: <a href="Fill-mode.html#Fill-mode" accesskey="n" rel="next">Fill mode</a>, Previous: <a href="Examples.html#Examples" accesskey="p" rel="prev">Examples</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Direct-disc-access-1"></a>
+<h2 class="chapter">8 Direct disc access</h2>
+<a name="index-direct-disc-access"></a>
+<a name="index-raw-devices"></a>
+
+<p>If you notice that the positions and sizes in the logfile are ALWAYS
+multiples of the sector size, maybe your kernel is caching the disc
+accesses and grouping them. In this case you may want to use direct disc
+access or a raw device to bypass the kernel cache and rescue more of
+your data.
+</p>
+<p>NOTE! Sector size must be correctly set with the &lsquo;<samp>--sector-size</samp>&rsquo;
+option for this to work. Only whole sectors can be read; both
+&lsquo;<samp>--input-position</samp>&rsquo; and &lsquo;<samp>--size</samp>&rsquo; must be a multiple of sector
+size.
+</p>
+<p>Try the &lsquo;<samp>--direct</samp>&rsquo; option first. If direct disc access is not
+available in your system, try raw devices. Read your system
+documentation to find how to bind a raw device to a regular block
+device. Some OSs provide raw access through special device names, like
+/dev/rdisk.
+</p>
+<p>Ddrescue aligns its I/O buffer to the sector size so that it can be used
+for direct disc access or to read from raw devices. For efficiency
+reasons, also aligns it to the memory page size if page size is a
+multiple of sector size. On some systems, ddrescue can&rsquo;t determine the
+size of a raw device, so an explicit &lsquo;<samp>--size</samp>&rsquo; or
+&lsquo;<samp>--complete-only</samp>&rsquo; option may be needed.
+</p>
+<p>Using direct disc access, or reading from a raw device, may be slower or
+faster than normal cached reading depending on your OS and hardware. In
+case it is slower you may want to make a first pass using normal cached
+reads and use direct disc access, or a raw device, only to recover the
+good sectors inside the failed blocks.
+</p>
+<br>
+<p>Example 1: using direct disc access.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f -n /dev/hdb1 /dev/hdc1 logfile
+ddrescue -d -f -r3 /dev/hdb1 /dev/hdc1 logfile
+e2fsck -v -f /dev/hdc1
+mount -t ext2 -o ro /dev/hdc1 /mnt
+</pre></div>
+
+<br>
+<p>Example 2: using a raw device.
+</p>
+<div class="example">
+<pre class="example">raw /dev/raw/raw1 /dev/hdb1
+ddrescue -f -n /dev/hdb1 /dev/hdc1 logfile
+ddrescue -C -f -r3 /dev/raw/raw1 /dev/hdc1 logfile
+raw /dev/raw/raw1 0 0
+e2fsck -v -f /dev/hdc1
+mount -t ext2 -o ro /dev/hdc1 /mnt
+</pre></div>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Fill-mode.html#Fill-mode" accesskey="n" rel="next">Fill mode</a>, Previous: <a href="Examples.html#Examples" accesskey="p" rel="prev">Examples</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

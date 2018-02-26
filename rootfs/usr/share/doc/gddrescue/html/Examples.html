@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Examples</title>
+
+<meta name="description" content="GNU ddrescue Manual: Examples">
+<meta name="keywords" content="GNU ddrescue Manual: Examples">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Direct-disc-access.html#Direct-disc-access" rel="next" title="Direct disc access">
+<link href="Logfile-structure.html#Logfile-structure" rel="prev" title="Logfile structure">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Examples"></a>
+<div class="header">
+<p>
+Next: <a href="Direct-disc-access.html#Direct-disc-access" accesskey="n" rel="next">Direct disc access</a>, Previous: <a href="Logfile-structure.html#Logfile-structure" accesskey="p" rel="prev">Logfile structure</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="A-small-tutorial-with-examples"></a>
+<h2 class="chapter">7 A small tutorial with examples</h2>
+<a name="index-examples"></a>
+
+<p>This tutorial is for those already able to use the dd command. If you
+don&rsquo;t know what dd is, better search the net for some introductory
+material about dd and GNU ddrescue first.
+</p>
+<p>A failing drive tends to develop more and more errors as time passes.
+Because of this, you should rescue the data from a drive as soon as you
+notice the first error. Be diligent because every time a physically
+damaged drive powers up and is able to output some data, it may be the
+very last time that it ever will.
+</p>
+<p>You should make a copy of the failing drive with ddrescue, and then try
+to repair the copy. If your data is really important, use the first copy
+as a master for a second copy, and try to repair the second copy. If
+something goes wrong, you have the master intact to try again.
+</p>
+<p>If you are trying to rescue a whole partition, first repair the copy
+with e2fsck or some other tool appropriate for the type of partition you
+are trying to rescue, then mount the repaired copy somewhere and try to
+recover the files in it.
+</p>
+<p>If the drive is so damaged that the file system in the rescued partition
+can&rsquo;t be repaired or mounted, you will have to browse the rescued data
+with an hex editor and extract the desired parts by hand or use a file
+recovery tool like photorec.
+</p>
+<p>If the partition table is damaged, you may try to rescue the whole disc,
+then try to repair the partition table and the partitions on the copy.
+</p>
+<p>If the damaged drive is not listed in /dev, then you cannot rescue it.
+At least not with ddrescue.
+</p>
+<br>
+<p>Example 1: Rescue a whole disc with two ext2 partitions in /dev/hda to
+/dev/hdb.<br>
+Note: you do not need to partition /dev/hdb beforehand, but if the
+partition table on /dev/hda is damaged, you&rsquo;ll need to recreate it
+somehow on /dev/hdb.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f -n /dev/hda /dev/hdb logfile
+ddrescue -d -f -r3 /dev/hda /dev/hdb logfile
+fdisk /dev/hdb
+e2fsck -v -f /dev/hdb1
+e2fsck -v -f /dev/hdb2
+</pre></div>
+
+<br>
+<p>Example 2: Rescue an ext2 partition in /dev/hda2 to /dev/hdb2.<br>
+Note: you need to create the hdb2 partition with fdisk first. hdb2
+should be of appropriate type and size.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f -n /dev/hda2 /dev/hdb2 logfile
+ddrescue -d -f -r3 /dev/hda2 /dev/hdb2 logfile
+e2fsck -v -f /dev/hdb2
+mount -t ext2 -o ro /dev/hdb2 /mnt
+  (read rescued files from /mnt)
+</pre></div>
+
+<br>
+<p>Example 3: Rescue a CD-ROM in /dev/cdrom.
+</p>
+<div class="example">
+<pre class="example">ddrescue -n -b2048 /dev/cdrom cdimage logfile
+ddrescue -d -b2048 /dev/cdrom cdimage logfile
+  (if errsize is zero, cdimage now contains a complete image of the
+   CD-ROM and you can write it to a blank CD-ROM)
+</pre></div>
+
+<br>
+<p>Example 4: Rescue a CD-ROM in /dev/cdrom from two copies.
+</p>
+<div class="example">
+<pre class="example">ddrescue -n -b2048 /dev/cdrom cdimage logfile
+ddrescue -d -b2048 /dev/cdrom cdimage logfile
+  (insert second copy in the CD drive)
+ddrescue -d -r1 -b2048 /dev/cdrom cdimage logfile
+  (if errsize is zero, cdimage now contains a complete image of the
+   CD-ROM and you can write it to a blank CD-ROM)
+</pre></div>
+
+<br>
+<p>Example 5: Merge the partially recovered images of 3 identical DVDs
+using their logfiles as domain logfiles.
+</p>
+<div class="example">
+<pre class="example">ddrescue -m logfile1 dvdimage1 dvdimage logfile
+ddrescue -m logfile2 dvdimage2 dvdimage logfile
+ddrescue -m logfile3 dvdimage3 dvdimage logfile
+  (if errsize is zero, dvdimage now contains a complete image of the DVD
+   and you can write it to a blank DVD)
+</pre></div>
+
+<br>
+<a name="lziprecover_002dexample"></a><p>Example 6: Rescue a lzip compressed backup from two copies on CD-ROM
+with error-checked merging of copies
+(See the
+<a href="http://www.nongnu.org/lzip/manual/lziprecover_manual.html">lziprecover manual</a>
+for details about lziprecover).
+</p>
+<div class="example">
+<pre class="example">ddrescue -b2048 /dev/cdrom cdimage1 logfile1
+mount -t iso9660 -o loop,ro cdimage1 /mnt/cdimage
+cp /mnt/cdimage/backup.tar.lz rescued1.tar.lz
+umount /mnt/cdimage
+  (insert second copy in the CD drive)
+ddrescue -b2048 /dev/cdrom cdimage2 logfile2
+mount -t iso9660 -o loop,ro cdimage2 /mnt/cdimage
+cp /mnt/cdimage/backup.tar.lz rescued2.tar.lz
+umount /mnt/cdimage
+lziprecover -m -v -o backup.tar.lz rescued1.tar.lz rescued2.tar.lz
+</pre></div>
+
+<br>
+<p>Example 7: While rescuing the whole drive /dev/hda to /dev/hdb, /dev/hda
+freezes up at position 12345678.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f /dev/hda /dev/hdb logfile       &lt;-- /dev/hda freezes here
+  (restart /dev/hda or reboot computer)
+  (restart copy at a safe distance from the troubled sector)
+ddrescue -f -i 12350000 /dev/hda /dev/hdb logfile
+  (copy backwards down to the troubled sector)
+ddrescue -f -R /dev/hda /dev/hdb logfile
+</pre></div>
+
+<br>
+<p>Example 8: While rescuing the whole drive /dev/hda to /dev/hdb, /dev/hdb
+fails and you have to rescue data to a third drive, /dev/hdc.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f -n /dev/hda /dev/hdb logfile1     &lt;-- /dev/hdb fails here
+ddrescue -f -m logfile1 /dev/hdb /dev/hdc logfile2
+ddrescue -f -n /dev/hda /dev/hdc logfile2
+ddrescue -d -f -r3 /dev/hda /dev/hdc logfile2
+</pre></div>
+
+<br>
+<p>Example 9: While rescuing the whole drive /dev/hda to /dev/hdb, /dev/hda
+stops responding and disappears from /dev.
+</p>
+<div class="example">
+<pre class="example">ddrescue -f -n /dev/hda /dev/hdb logfile      &lt;-- /dev/hda fails here
+  (restart /dev/hda or reboot computer as many times as needed)
+ddrescue -f -n -A /dev/hda /dev/hdb logfile
+ddrescue -d -f -r3 /dev/hda /dev/hdb logfile
+</pre></div>
+
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Direct-disc-access.html#Direct-disc-access" accesskey="n" rel="next">Direct disc access</a>, Previous: <a href="Logfile-structure.html#Logfile-structure" accesskey="p" rel="prev">Logfile structure</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

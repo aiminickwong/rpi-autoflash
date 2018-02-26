@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 5.2, http://www.gnu.org/software/texinfo/ -->
+<head>
+<title>GNU ddrescue Manual: Invoking ddrescuelog</title>
+
+<meta name="description" content="GNU ddrescue Manual: Invoking ddrescuelog">
+<meta name="keywords" content="GNU ddrescue Manual: Invoking ddrescuelog">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<link href="index.html#Top" rel="start" title="Top">
+<link href="Concept-index.html#Concept-index" rel="index" title="Concept index">
+<link href="index.html#Top" rel="up" title="Top">
+<link href="Problems.html#Problems" rel="next" title="Problems">
+<link href="Ddrescuelog.html#Ddrescuelog" rel="prev" title="Ddrescuelog">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.indentedblock {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smallindentedblock {margin-left: 3.2em; font-size: smaller}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style:oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:nowrap}
+span.nolinebreak {white-space:nowrap}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+<a name="Invoking-ddrescuelog"></a>
+<div class="header">
+<p>
+Next: <a href="Problems.html#Problems" accesskey="n" rel="next">Problems</a>, Previous: <a href="Ddrescuelog.html#Ddrescuelog" accesskey="p" rel="prev">Ddrescuelog</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+<hr>
+<a name="Invoking-ddrescuelog-1"></a>
+<h2 class="chapter">12 Invoking ddrescuelog</h2>
+<a name="index-invoking-ddrescuelog"></a>
+
+<p>The format for running ddrescuelog is:
+</p>
+<div class="example">
+<pre class="example">ddrescuelog [<var>options</var>] <var>logfile</var>
+</pre></div>
+
+<p>Ddrescuelog supports the following options:
+</p>
+<dl compact="compact">
+<dt>&lsquo;<samp>-h</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--help</samp>&rsquo;</dt>
+<dd><p>Print an informative help message describing the options and exit.
+</p>
+</dd>
+<dt>&lsquo;<samp>-V</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--version</samp>&rsquo;</dt>
+<dd><p>Print the version number of ddrescuelog on the standard output and exit.
+</p>
+</dd>
+<dt>&lsquo;<samp>-a <var>old_types</var>,<var>new_types</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--change-types=<var>old_types</var>,<var>new_types</var></samp>&rsquo;</dt>
+<dd><p>Change the status of every block in the rescue domain from one type in
+<var>old_types</var> to the corresponding type in <var>new_types</var>, much like
+the &lsquo;<samp>tr</samp>&rsquo; command does, and write the resulting logfile to standard
+output. <var>old_types</var> and <var>new_types</var> are strings of block status
+characters as defined in the chapter Logfile structure (see <a href="Logfile-structure.html#Logfile-structure">Logfile structure</a>). Blocks whose status is not in <var>old_types</var> are left
+unchanged. If <var>new_types</var> is shorter than <var>old_types</var> the last
+type of <var>new_types</var> is repeated as many times as necessary.
+</p>
+</dd>
+<dt>&lsquo;<samp>-b <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--block-size=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Block size used by ddrescuelog. Depending on the requested operation it
+may be the sector size of the input device, the block size of the
+rescued file system, etc. Defaults to 512.
+</p>
+</dd>
+<dt>&lsquo;<samp>-B</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--binary-prefixes</samp>&rsquo;</dt>
+<dd><p>Show units with binary prefixes (powers of 1024).<br>
+SI prefixes (powers of 1000) are used by default. (See table above,
+<a href="Invoking-ddrescue.html#Invoking-ddrescue">Invoking ddrescue</a>).
+</p>
+</dd>
+<dt>&lsquo;<samp>-c[<var>type1</var><var>type2</var>]</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--create-logfile[=<var>type1</var><var>type2</var>]</samp>&rsquo;</dt>
+<dd><p>Create a logfile from a list of block numbers read from standard input.
+Only blocks included in the rescue domain will be added to <var>logfile</var>.
+</p>
+<p><var>type1</var> and <var>type2</var> are block status characters as defined in
+the chapter Logfile structure (see <a href="Logfile-structure.html#Logfile-structure">Logfile structure</a>). <var>type1</var>
+sets the type for blocks included in the list, while <var>type2</var> sets
+the type for the rest of the logfile. If not specified, <var>type1</var>
+defaults to &lsquo;<samp>+</samp>&rsquo; and <var>type2</var> defaults to &lsquo;<samp>-</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>-C[<var>type</var>]</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--complete-logfile[=<var>type</var>]</samp>&rsquo;</dt>
+<dd><p>Complete a synthetic (user fabricated) <var>logfile</var> by filling the gaps
+with blocks of type <var>type</var>, and write the completed logfile to
+standard output. <var>type</var> is one of the block status characters
+defined in the chapter Logfile structure (see <a href="Logfile-structure.html#Logfile-structure">Logfile structure</a>). If
+<var>type</var> is not specified, the gaps are filled with non-tried blocks.
+All gaps in the logfile are filled. Domain options are ignored.
+</p>
+</dd>
+<dt>&lsquo;<samp>-d</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--delete-if-done</samp>&rsquo;</dt>
+<dd><p>Delete the given <var>logfile</var> if all the blocks in the rescue domain
+have been successfuly recovered. The exit status is 0 if <var>logfile</var>
+could be deleted, 1 otherwise.
+</p>
+</dd>
+<dt>&lsquo;<samp>-D</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--done-status</samp>&rsquo;</dt>
+<dd><p>Test if all the blocks in the rescue domain have been successfuly
+recovered. The exit status is 0 if all tested blocks are finished, 1
+otherwise.
+</p>
+</dd>
+<dt>&lsquo;<samp>-f</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--force</samp>&rsquo;</dt>
+<dd><p>Force overwrite of <var>logfile</var>.
+</p>
+</dd>
+<dt>&lsquo;<samp>-i <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--input-position=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Starting position of the rescue domain, in bytes. Defaults to 0. It
+refers to a position in the original input file.
+</p>
+</dd>
+<dt>&lsquo;<samp>-l <var>types</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--list-blocks=<var>types</var></samp>&rsquo;</dt>
+<dd><p>Print on standard output the block numbers of the blocks specified as
+any of <var>types</var> in <var>logfile</var> and included in the rescue domain.
+<var>types</var> contains one or more of the block status characters defined
+in the chapter Logfile structure (see <a href="Logfile-structure.html#Logfile-structure">Logfile structure</a>).
+</p>
+<p>The list format is one block number per line in decimal, like the output
+of the badblocks program, so that it can be used as input for e2fsck or
+other similar filesystem repairing tool.
+</p>
+</dd>
+<dt>&lsquo;<samp>-L</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--loose-domain</samp>&rsquo;</dt>
+<dd><p>Accept an incomplete synthetic (user fabricated) domain logfile or
+compare-as-domain logfile and fill the gaps in the list of data blocks
+with non-tried blocks. The blocks in the logfile must be strictly
+ascending and non-overlapping, but they do not need to be contiguous.
+This option allows making quick edits to a logfile without all the size
+calculations involved in making all data blocks contiguous again.
+</p>
+</dd>
+<dt>&lsquo;<samp>-m <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--domain-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Restrict the rescue domain to the blocks marked as finished in the
+logfile <var>file</var>.
+</p>
+</dd>
+<dt>&lsquo;<samp>-n</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--invert-logfile</samp>&rsquo;</dt>
+<dd><p>Invert the types of the blocks in <var>logfile</var> which are included in
+the rescue domain, and write the resulting logfile to standard output.
+Finished blocks (&lsquo;<samp>+</samp>&rsquo;) are changed to bad-sector (&lsquo;<samp>-</samp>&rsquo;), all
+other types are changed to finished. &lsquo;<samp>--invert-logfile</samp>&rsquo; is
+equivalent to &lsquo;<samp>--change-types=?*/-+,++++-</samp>&rsquo;
+</p>
+</dd>
+<dt>&lsquo;<samp>-o <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--output-position=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Starting position of the image of the rescue domain in the output file,
+in bytes. Is used by the &lsquo;<samp>--list-blocks</samp>&rsquo; option. Defaults to
+&lsquo;<samp>--input-position</samp>&rsquo;.
+</p>
+</dd>
+<dt>&lsquo;<samp>-p <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--compare-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Compare the types of the blocks included in the rescue domain. The exit
+status is 0 if all tested blocks are the same in both <var>file</var> and
+<var>logfile</var>, 1 otherwise.
+</p>
+</dd>
+<dt>&lsquo;<samp>-P <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--compare-as-domain=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Compare only the blocks marked as finished in the rescue domain. The
+exit status is 0 if all tested blocks are the same in both <var>file</var>
+and <var>logfile</var>, 1 otherwise. Two files comparing equal with this
+option are equivalent when used as domain logfiles.
+</p>
+</dd>
+<dt>&lsquo;<samp>-q</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--quiet</samp>&rsquo;</dt>
+<dd><p>Quiet operation. Suppress all messages.
+</p>
+</dd>
+<dt>&lsquo;<samp>-s <var>bytes</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--size=<var>bytes</var></samp>&rsquo;</dt>
+<dd><p>Maximum size of the rescue domain, in bytes. It refers to a size in the
+original input file.
+</p>
+</dd>
+<dt>&lsquo;<samp>-t</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--show-status</samp>&rsquo;</dt>
+<dd><p>Print a summary of <var>logfile</var> contents on the standard output. The
+summary can be restricted to one or several parts of <var>logfile</var> if
+the domain setting options are used.
+</p>
+</dd>
+<dt>&lsquo;<samp>-v</samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--verbose</samp>&rsquo;</dt>
+<dd><p>Verbose mode. Further -v&rsquo;s (up to 4) increase the verbosity level.
+</p>
+</dd>
+<dt>&lsquo;<samp>-x <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--xor-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Perform a logical XOR (exclusive OR) operation between the finished
+blocks in <var>file</var> and those in <var>logfile</var>, and write the resulting
+logfile to standard output. In other words, in the resulting logfile a
+block is only shown as finished if it was finished in either of the two
+input logfiles but not in both.
+</p>
+</dd>
+<dt>&lsquo;<samp>-y <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--and-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Perform a logical AND operation between the finished blocks in
+<var>file</var> and those in <var>logfile</var>, and write the resulting logfile
+to standard output. In other words, in the resulting logfile a block is
+only shown as finished if it was finished in both input logfiles.
+</p>
+</dd>
+<dt>&lsquo;<samp>-z <var>file</var></samp>&rsquo;</dt>
+<dt>&lsquo;<samp>--or-logfile=<var>file</var></samp>&rsquo;</dt>
+<dd><p>Perform a logical OR operation between the finished blocks in <var>file</var>
+and those in <var>logfile</var>, and write the resulting logfile to standard
+output. In other words, in the resulting logfile a block is shown as
+finished if it was finished in either of the two input logfiles.
+</p>
+</dd>
+</dl>
+
+<p>Exit status: 0 for a normal exit, 1 for environmental problems (file not
+found, invalid flags, I/O errors, etc), 2 to indicate a corrupt or
+invalid input file, 3 for an internal consistency error (eg, bug) which
+caused ddrescuelog to panic.
+</p>
+
+<hr>
+<div class="header">
+<p>
+Next: <a href="Problems.html#Problems" accesskey="n" rel="next">Problems</a>, Previous: <a href="Ddrescuelog.html#Ddrescuelog" accesskey="p" rel="prev">Ddrescuelog</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="Concept-index.html#Concept-index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>
